@@ -51,7 +51,7 @@ export const ContactForm: FC = () => {
     <form onSubmit={handleFormSubmit}>
       <input type="text" value={name} name="name" onChange={onChangeInput} />
       <input type="tel" value={number} name="number" onChange={onChangeInput} />
-      <Button variant="contained">Contained</Button>
+      <button type="submit">Add contact</button>
     </form>
   );
 };
