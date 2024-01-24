@@ -5,7 +5,6 @@ import { addContact } from '@/redux/contactSlice';
 import { useDispatch, useSelector } from 'react-redux';
 import { getContacts, getName, getNumber } from '@/redux/selectors';
 import { setName, setNumber } from '@/redux/formSlice';
-import { Button } from '@mui/material';
 
 export const ContactForm: FC = () => {
   const name = useSelector(getName);
