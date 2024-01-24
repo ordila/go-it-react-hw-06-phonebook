@@ -1,12 +1,23 @@
 import { FC } from 'react';
 import { ContactListItem } from '../ContactListItem/ContactListItem';
-import { ContactListProps } from './ContactList.types';
 
-const ContactList: FC<ContactListProps> = ({ contacts, onRemove }) => {
+import { getContacts, getFilter } from '@/redux/selectors';
+import { useSelector } from 'react-redux';
+
+const ContactList: FC = () => {
+  const contacts = useSelector(getContacts);
+
+  const filter = useSelector(getFilter);
+
+  const getVisibleContacts = () => {
+    return contacts.filter(contact =>
+      contact.name.toLowerCase().includes(filter.toLowerCase())
+    );
+  };
   return (
     <ul>
-      {contacts.map(contact => (
-        <ContactListItem key={contact.id} {...contact} onRemove={onRemove} />
+      {getVisibleContacts().map(contact => (
+        <ContactListItem key={contact.id} {...contact} />
       ))}
     </ul>
   );

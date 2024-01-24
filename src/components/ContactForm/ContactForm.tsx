@@ -1,24 +1,32 @@
-import { FC, useState } from 'react';
+import { FC } from 'react';
 import { nanoid } from 'nanoid';
-import { ContactProps } from './ContactForm.types';
 
-export const ContactForm: FC<ContactProps> = ({ onAdd }) => {
-  const [name, setName] = useState('');
-  const [number, setNumber] = useState('');
+import { addContact } from '@/redux/contactSlice';
+import { useDispatch, useSelector } from 'react-redux';
+import { getContacts, getName, getNumber } from '@/redux/selectors';
+import { setName, setNumber } from '@/redux/formSlice';
+import { Button } from '@mui/material';
+
+export const ContactForm: FC = () => {
+  const name = useSelector(getName);
+  const number = useSelector(getNumber);
+  const contacts = useSelector(getContacts);
+
+  const dispatch = useDispatch();
 
   const onChangeInput = (event: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = event.target;
-    name === 'name' ? setName(value) : setNumber(value);
+    name === 'name' ? dispatch(setName(value)) : dispatch(setNumber(value));
   };
 
   const handleFormSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
-    const isValidateForm = validateForm();
+    if (!validateForm()) return;
 
-    if (!isValidateForm) return;
+    if (!handleCheckUniqueContact(name)) return;
 
-    onAdd({ id: nanoid(), name, number });
+    dispatch(addContact({ id: nanoid(), name, number }));
     setName('');
     setNumber('');
   };
@@ -31,11 +39,19 @@ export const ContactForm: FC<ContactProps> = ({ onAdd }) => {
     return true;
   };
 
+  const handleCheckUniqueContact = (name: string) => {
+    const isExistContact = !!contacts.find(
+      contact => contact.name.toUpperCase() === name.toUpperCase()
+    );
+    isExistContact && alert('Contact is already exist');
+    return !isExistContact;
+  };
+
   return (
     <form onSubmit={handleFormSubmit}>
       <input type="text" value={name} name="name" onChange={onChangeInput} />
       <input type="tel" value={number} name="number" onChange={onChangeInput} />
-      <button type="submit">Додати</button>
+      <Button variant="contained">Contained</Button>
     </form>
   );
 };
