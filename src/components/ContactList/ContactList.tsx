@@ -14,6 +14,7 @@ const ContactList: FC = () => {
       contact.name.toLowerCase().includes(filter.toLowerCase())
     );
   };
+  console.log('getVisibleContacts(', getVisibleContacts());
   return (
     <ul>
       {getVisibleContacts().map(contact => (

@@ -1,21 +1,20 @@
-import { FC } from 'react';
+import { FC, useState } from 'react';
 import { nanoid } from 'nanoid';
 
 import { addContact } from '@/redux/contactSlice';
 import { useDispatch, useSelector } from 'react-redux';
-import { getContacts, getName, getNumber } from '@/redux/selectors';
-import { setName, setNumber } from '@/redux/formSlice';
+import { getContacts } from '@/redux/selectors';
 
 export const ContactForm: FC = () => {
-  const name = useSelector(getName);
-  const number = useSelector(getNumber);
+  const [number, setNumber] = useState('');
+  const [name, setName] = useState('');
   const contacts = useSelector(getContacts);
 
   const dispatch = useDispatch();
 
   const onChangeInput = (event: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = event.target;
-    name === 'name' ? dispatch(setName(value)) : dispatch(setNumber(value));
+    name === 'name' ? setName(value) : setNumber(value);
   };
 
   const handleFormSubmit = (event: React.FormEvent<HTMLFormElement>) => {
